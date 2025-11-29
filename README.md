@@ -9,6 +9,7 @@ This includes:
  - [Lectern](https://github.com/mcbeet/lectern)
 
 ## Flake Usage Example
+```nix
 {
   description = "My flake";
 
@@ -37,6 +38,8 @@ This includes:
       };
     };
 }
+
+```
 
 
 This is not an official mcbeet resource.
