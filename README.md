@@ -32,6 +32,7 @@ This includes:
       nixosConfigurations = {
         <your hostname> = nixpkgs.lib.nixosSystem {
           inherit pkgs;
+          inherit inputs;
           inherit system;
           modules = [ ./configuration.nix ];
         };
@@ -39,6 +40,32 @@ This includes:
     };
 }
 
+```
+
+The overlay will allow you to add a mcbeet package (beet, bolt, mecha or lectern) to either your enviroment.systemPackages or home.packages just like any other packages
+```nix
+{ pkgs, ... }:
+{
+  environment.systemPackages = with pkgs; [
+    beet
+    bolt
+    mecha
+    lectern
+  ];
+}
+```
+
+Alternatively, you can also add the exposed packages directly
+```nix
+{ inputs, pkgs, ... }:
+{
+  environment.systemPackages = with pkgs; [
+    inputs.mcbeet.packages.${system}.beet
+    inputs.mcbeet.packages.${system}.bolt
+    inputs.mcbeet.packages.${system}.mecha
+    inputs.mcbeet.packages.${system}.lectern
+  ];
+}
 ```
 
 

@@ -29,6 +29,7 @@
               tokenstream
               ;
           };
+
           bolt = pkgs.callPackage ./bolt {
             inherit
               beet
