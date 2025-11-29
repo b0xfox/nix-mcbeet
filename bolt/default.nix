@@ -2,10 +2,10 @@
   pkgs,
   beet,
   mecha,
-  pythonPackages,
+  pythonPkgs,
   fetchFromGitHub,
 }:
-pythonPackages.buildPythonPackage rec {
+pythonPkgs.buildPythonPackage rec {
 
   pname = "bolt";
   version = "0.49.2";
@@ -18,7 +18,7 @@ pythonPackages.buildPythonPackage rec {
     hash = "sha256-kJgZVwMZ1Z50KSYFA16SF3zMpGgYbX3ryFgYTso+JUM=";
   };
 
-  nativeBuildInputs = with pythonPackages; [
+  nativeBuildInputs = with pythonPkgs; [
     poetry-core
   ];
 

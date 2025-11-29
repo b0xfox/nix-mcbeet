@@ -1,56 +1,70 @@
 {
-  description = "The Minecraft pack development kit.";
+  description = "Flake for adding the mcbeet package set";
 
   inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
   outputs =
-    { self, nixpkgs, ... }:
+    { self, nixpkgs }:
     let
-      forAllSystems = nixpkgs.lib.genAttrs nixpkgs.lib.systems.flakeExposed;
-    in
-    {
-      packages = forAllSystems (
+      forEachSystem = nixpkgs.lib.genAttrs nixpkgs.lib.systems.flakeExposed;
+
+      beetPackages =
         system:
         let
-          pkgs = import nixpkgs {
-            inherit system;
-            overlays = [ self.overlays.default ];
-          };
-        in
-        {
-          beet = pkgs.callPackage ./beet {
-            pythonPackages = pkgs.python312Packages;
+          pkgs = import nixpkgs { inherit system; };
+          pythonPkgs = pkgs.python312Packages;
+
+          tokenstream = pkgs.callPackage ./tokenstream {
+            inherit pythonPkgs;
           };
 
-          bolt = pkgs.callPackage ./bolt {
-            beet = self.packages.${system}.beet;
-            mecha = self.packages.${system}.mecha;
-            pythonPackages = pkgs.python312Packages;
+          beet = pkgs.callPackage ./beet {
+            inherit pythonPkgs;
           };
 
           mecha = pkgs.callPackage ./mecha {
-            beet = self.packages.${system}.beet;
-            tokenstream = self.packages.${system}.tokenstream;
-            pythonPackages = pkgs.python312Packages;
+            inherit
+              beet
+              pythonPkgs
+              tokenstream
+              ;
+          };
+          bolt = pkgs.callPackage ./bolt {
+            inherit
+              beet
+              mecha
+              pythonPkgs
+              ;
           };
 
           lectern = pkgs.callPackage ./lectern {
-            beet = self.packages.${system}.beet;
-            pythonPackages = pkgs.python312Packages;
+            inherit
+              beet
+              pythonPkgs
+              ;
           };
 
-          tokenstream = pkgs.callPackage ./tokenstream {
-            pythonPackages = pkgs.python312Packages;
+          addedPackages = {
+            inherit
+              beet
+              bolt
+              mecha
+              lectern
+              ;
           };
-        }
-      );
+        in
+        addedPackages;
+    in
+    {
+      packages = forEachSystem beetPackages;
 
       overlays.default = final: prev: {
-        beet = self.packages.beet;
-        mecha = self.packages.beet;
-        bolt = self.packages.beet;
-        lectern = self.packages.beet;
-        tokenstream = self.packages.tokenstream;
+        inherit (self.packages.${prev.stdenv.hostPlatform.system})
+          beet
+          bolt
+          mecha
+          lectern
+          ;
       };
     };
 }

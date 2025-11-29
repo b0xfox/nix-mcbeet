@@ -1,9 +1,9 @@
 {
   pkgs,
-  pythonPackages,
+  pythonPkgs,
   fetchFromGitHub,
 }:
-pythonPackages.buildPythonPackage rec {
+pythonPkgs.buildPythonPackage rec {
 
   pname = "beet";
   version = "0.112.0";
@@ -16,12 +16,12 @@ pythonPackages.buildPythonPackage rec {
     hash = "sha256-NfYOxS1UAgrFrYGD4QSC80/LJN9WplA//DIvQEgJ9ZM=";
   };
 
-  nativeBuildInputs = with pythonPackages; [
+  nativeBuildInputs = with pythonPkgs; [
     wheel
     poetry-core
   ];
 
-  propagatedBuildInputs = with pythonPackages; [
+  propagatedBuildInputs = with pythonPkgs; [
     toml
     click
     pyyaml

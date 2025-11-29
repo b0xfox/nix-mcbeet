@@ -1,10 +1,10 @@
 {
   pkgs,
   beet,
-  pythonPackages,
+  pythonPkgs,
   fetchFromGitHub,
 }:
-pythonPackages.buildPythonPackage rec {
+pythonPkgs.buildPythonPackage rec {
 
   pname = "lectern";
   version = "0.34.0";
@@ -17,14 +17,14 @@ pythonPackages.buildPythonPackage rec {
     hash = "sha256-uqbHaHzWb2+A9DHexGuAybh7kDxr1R7f/Sd5Aw9LBvA=";
   };
 
-  nativeBuildInputs = with pythonPackages; [
+  nativeBuildInputs = with pythonPkgs; [
     poetry-core
   ];
 
   propagatedBuildInputs = [
     beet
-    pythonPackages.click
-    pythonPackages.markdown-it-py
+    pythonPkgs.click
+    pythonPkgs.markdown-it-py
   ];
 
   meta = {

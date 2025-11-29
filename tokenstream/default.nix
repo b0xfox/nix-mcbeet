@@ -1,9 +1,9 @@
 {
   pkgs,
-  pythonPackages,
+  pythonPkgs,
   fetchFromGitHub,
 }:
-pythonPackages.buildPythonPackage rec {
+pythonPkgs.buildPythonPackage rec {
 
   pname = "tokenstream";
   version = "1.7.0";
@@ -16,7 +16,7 @@ pythonPackages.buildPythonPackage rec {
     hash = "sha256-idTgTVaZkF6M9ly5HzqmHtUUc7Bp5VrR2EioDSHmThM=";
   };
 
-  nativeBuildInputs = with pythonPackages; [
+  nativeBuildInputs = with pythonPkgs; [
     poetry-core
   ];
 
